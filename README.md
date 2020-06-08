@@ -9,6 +9,8 @@
 
 Welcome to the Combate a Fraude's React Native repository! In this page you'll learn how to integrate your project with the [Android SDKs](https://github.com/combateafraude/Android) in React Native.
 
+## Integrating
+
 **Special thanks to [@felansu](https://github.com/felansu) for this tutorial :green_heart:**
 
 1. Create the files `CombateAFraudeModule.java` and `CombateAFraudePackage.java` in path `<project_folder>/android/app/src/main/java/com/combateafraudereact/combateAFraude`.

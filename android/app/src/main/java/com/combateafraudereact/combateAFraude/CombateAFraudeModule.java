@@ -30,17 +30,16 @@ public class CombateAFraudeModule extends ReactContextBaseJavaModule {
 
                 try {
                     PassiveFaceLivenessResult passiveFaceLivenessResult = (PassiveFaceLivenessResult) intent.getSerializableExtra(PassiveFaceLivenessResult.PARAMETER_NAME);
-                    if (passiveFaceLivenessResult.getSdkFailure() != null) {
-                        WritableMap writableMap = new WritableNativeMap();
-                        writableMap.putInt("resultCode", resultCode);
-                        writableMap.putString("message", passiveFaceLivenessResult.getSdkFailure().getMessage());
-                        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("combateAFraude_error", writableMap);
-                    } else {
+                    if (passiveFaceLivenessResult.wasSuccessful()) {
                         String selfieBase64 = encodeImage(BitmapFactory.decodeFile(passiveFaceLivenessResult.getImagePath()));
                         WritableMap writableMap = new WritableNativeMap();
                         writableMap.putString("selfieBase64", selfieBase64);
-                        writableMap.putInt("missedAttemps", passiveFaceLivenessResult.getMissedAttemps());
+                        writableMap.putInt("missedAttempts", passiveFaceLivenessResult.getMissedAttempts());
                         getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("combateAFraude_passiveFaceLiveness", writableMap);
+                    } else {
+                        WritableMap writableMap = new WritableNativeMap();
+                        writableMap.putString("message", passiveFaceLivenessResult.getSdkFailure().getMessage());
+                        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("combateAFraude_error", writableMap);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -62,7 +61,6 @@ public class CombateAFraudeModule extends ReactContextBaseJavaModule {
         try {
             System.out.println("combateAFraude::opening::passiveFaceLiveness");
             PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder("MOBILE_TOKEN")
-                    .setMaxDimensionPhoto(3000)
                     .build();
 
             Activity activity = getCurrentActivity();

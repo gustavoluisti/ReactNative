@@ -37,7 +37,7 @@ allprojects {
 
         maven {
             // Combate a fraude
-            url "https://raw.githubusercontent.com/combateafraude/Mobile/android-releases"
+            url "https://repo.combateafraude.com/android/release"
         }
     }
 }

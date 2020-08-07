@@ -5,29 +5,40 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const App: () => React$Node = () => {
 
-  const [photoInfo, setPhotoInfo] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [passiveFaceLivenessResult, setPassiveFaceLivenessResult] = useState(null);
+  const [documentDetectorResult, setDocumentDetectorResult] = useState(null);
   const deviceInfoEmitter = new NativeEventEmitter();
 
 
   useEffect(() => {
-    async function passiveFaceLivenessListenner(params) {
-      const {selfieBase64, missedAttemps} = params;
-      setPhotoInfo({selfieBase64, missedAttemps});
+    async function passiveFaceLivenessSuccess(params) {
+      setPassiveFaceLivenessResult("Selfie: "+params.selfiePath);
     }
 
-    async function combateAFraudeErrorListenner(params) {
-      setErrorMessage(params.message);
+    async function passiveFaceLivenessError(params) {
       setIsLoading(false);
+      setPassiveFaceLivenessResult("Erro: "+params.error);
     }
 
-    deviceInfoEmitter.addListener('combateAFraude_passiveFaceLiveness', passiveFaceLivenessListenner);
-    deviceInfoEmitter.addListener('combateAFraude_error', combateAFraudeErrorListenner);
+    async function documentDetectorSuccess(params) {
+      setDocumentDetectorResult("Frente do documento: "+params.frontPath+"\n\nVerso do documento: "+params.backPath);
+    }
+
+    async function documentDetectorError(params) {
+      setIsLoading(false);
+      setDocumentDetectorResult("Erro: "+params.error);
+    }
+
+    deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
+    deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
+    deviceInfoEmitter.addListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
+    deviceInfoEmitter.addListener('CAF_DocumentDetector_Error', documentDetectorError);
 
     return () => {
-      deviceInfoEmitter.removeListener('combateAFraude_passiveFaceLiveness', passiveFaceLivenessListenner);
-      deviceInfoEmitter.removeListener('combateAFraude_error', combateAFraudeErrorListenner);
+      deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
+      deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
+      deviceInfoEmitter.removeListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
+      deviceInfoEmitter.removeListener('CAF_DocumentDetector_Error', documentDetectorError);
     };
   }, [deviceInfoEmitter]);
 
@@ -40,12 +51,32 @@ const App: () => React$Node = () => {
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
               <Button style={styles.button}
-                      title='Open Faces Liveness'
-                      onPress={() => NativeModules.CombateAFraude.passiveFaceLiveness()}/>
+                      title='PassiveFaceLiveness'
+                      onPress={() => {
+                        NativeModules.CAF.passiveFaceLiveness();
+                      }}/>
             </View>
 
             <View style={styles.sectionContainer}>
-              <Text>{photoInfo ? 'Selfie is saved in phone storage' : 'Not saved yet'}</Text>
+              <Text>{'PassiveFaceLivenessResult: ' + passiveFaceLivenessResult}</Text>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Button style={styles.button}
+                      title='DocumentDetector - CNH'
+                      onPress={() => {
+                        NativeModules.CAF.documentDetectorCnh();
+                      }}/>
+            </View>
+            <View style={styles.sectionContainer}>
+              <Button style={styles.button}
+                      title='DocumentDetector - RG'
+                      onPress={() => {
+                        NativeModules.CAF.documentDetectorRg();
+                      }}/>
+            </View>
+
+            <View style={styles.sectionContainer}>
+              <Text>{'DocumentDetectorResult: ' + documentDetectorResult}</Text>
             </View>
           </View>
         </ScrollView>

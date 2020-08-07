@@ -190,8 +190,8 @@ android {
         noCompress "tflite"
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 }
 
@@ -203,6 +203,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     implementation 'com.combateafraude.sdk:passive-face-liveness:3.3.4'
+    implementation 'com.combateafraude.sdk:document-detector:4.4.1'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

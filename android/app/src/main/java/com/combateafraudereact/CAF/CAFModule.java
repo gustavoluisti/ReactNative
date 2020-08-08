@@ -24,6 +24,8 @@ public class CAFModule extends ReactContextBaseJavaModule {
     private final int REQUEST_CODE_PASSIVE_FACE_LIVENESS = 50005;
     private final int REQUEST_CODE_DOCUMENT_DETECTOR = 50006;
 
+    private static final String mobileToken = "";
+
 
     CAFModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -83,7 +85,7 @@ public class CAFModule extends ReactContextBaseJavaModule {
     public void passiveFaceLiveness() {
         try {
             System.out.println("CAF::opening::passiveFaceLiveness");
-            PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder("MOBILE_TOKEN")
+            PassiveFaceLiveness passiveFaceLiveness = new PassiveFaceLiveness.Builder(mobileToken)
                     .build();
 
             Activity activity = getCurrentActivity();
@@ -99,7 +101,7 @@ public class CAFModule extends ReactContextBaseJavaModule {
     public void documentDetectorCnh() {
         try {
             System.out.println("CAF::opening::documentDetector::cnh");
-            DocumentDetector documentDetector = new DocumentDetector.Builder("MOBILE_TOKEN")
+            DocumentDetector documentDetector = new DocumentDetector.Builder(mobileToken)
                     .setDocumentDetectorFlow(new DocumentDetectorStep[]{
                         new DocumentDetectorStep(Document.CNH_FRONT, null, null, null),
                         new DocumentDetectorStep(Document.CNH_BACK, null, null, null)
@@ -119,7 +121,7 @@ public class CAFModule extends ReactContextBaseJavaModule {
     public void documentDetectorRg() {
         try {
             System.out.println("combateAFraude::opening::documentDetector::rg");
-            DocumentDetector documentDetector = new DocumentDetector.Builder("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1ZTg2MjAxNGVjMjFjNDAwMDgxYjY2NmQifQ.9bf3VPzAwHd7IMS9ZzAUaguhe0OKu2mHxCjddQgboVE")
+            DocumentDetector documentDetector = new DocumentDetector.Builder(mobileToken)
                     .setDocumentDetectorFlow(new DocumentDetectorStep[]{
                         new DocumentDetectorStep(Document.RG_FRONT, null, null, null),
                         new DocumentDetectorStep(Document.RG_BACK, null, null, null)

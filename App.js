@@ -16,7 +16,6 @@ const App: () => React$Node = () => {
     }
 
     async function passiveFaceLivenessError(params) {
-      setIsLoading(false);
       setPassiveFaceLivenessResult("Erro: "+params.error);
     }
 
@@ -25,7 +24,6 @@ const App: () => React$Node = () => {
     }
 
     async function documentDetectorError(params) {
-      setIsLoading(false);
       setDocumentDetectorResult("Erro: "+params.error);
     }
 

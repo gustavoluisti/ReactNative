@@ -119,7 +119,7 @@ public class CAFModule extends ReactContextBaseJavaModule {
     public void documentDetectorRg() {
         try {
             System.out.println("combateAFraude::opening::documentDetector::rg");
-            DocumentDetector documentDetector = new DocumentDetector.Builder("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1ZTg2MjAxNGVjMjFjNDAwMDgxYjY2NmQifQ.9bf3VPzAwHd7IMS9ZzAUaguhe0OKu2mHxCjddQgboVE")
+            DocumentDetector documentDetector = new DocumentDetector.Builder("MOBILE_TOKEN")
                     .setDocumentDetectorFlow(new DocumentDetectorStep[]{
                         new DocumentDetectorStep(Document.RG_FRONT, null, null, null),
                         new DocumentDetectorStep(Document.RG_BACK, null, null, null)

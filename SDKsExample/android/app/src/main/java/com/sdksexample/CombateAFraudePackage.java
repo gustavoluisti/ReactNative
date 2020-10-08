@@ -1,4 +1,4 @@
-package com.sdksexample.CAF;
+package com.sdksexample;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CAFPackage implements ReactPackage {
+public class CombateAFraudePackage implements ReactPackage {
 
     @NotNull
     @Override
@@ -24,7 +24,7 @@ public class CAFPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(@NotNull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new CAFModule(reactContext));
+        modules.add(new CombateAFraudeModule(reactContext));
 
         return modules;
     }

@@ -6,38 +6,38 @@ const App: () => React$Node = () => {
 
   const [passiveFaceLivenessResult, setPassiveFaceLivenessResult] = useState(null);
   const [documentDetectorResult, setDocumentDetectorResult] = useState(null);
-  const deviceInfoEmitter = new NativeEventEmitter();
+  // const deviceInfoEmitter = new NativeEventEmitter();
 
 
-  useEffect(() => {
-    async function passiveFaceLivenessSuccess(params) {
-      setPassiveFaceLivenessResult("Selfie: "+params.selfiePath);
-    }
+  // useEffect(() => {
+  //   async function passiveFaceLivenessSuccess(params) {
+  //     setPassiveFaceLivenessResult("Selfie: "+params.selfiePath);
+  //   }
 
-    async function passiveFaceLivenessError(params) {
-      setPassiveFaceLivenessResult("Erro: "+params.error);
-    }
+  //   async function passiveFaceLivenessError(params) {
+  //     setPassiveFaceLivenessResult("Erro: "+params.error);
+  //   }
 
-    async function documentDetectorSuccess(params) {
-      setDocumentDetectorResult("Frente do documento: "+params.frontPath+"\n\nVerso do documento: "+params.backPath);
-    }
+  //   async function documentDetectorSuccess(params) {
+  //     setDocumentDetectorResult("Frente do documento: "+params.frontPath+"\n\nVerso do documento: "+params.backPath);
+  //   }
 
-    async function documentDetectorError(params) {
-      setDocumentDetectorResult("Erro: "+params.error);
-    }
+  //   async function documentDetectorError(params) {
+  //     setDocumentDetectorResult("Erro: "+params.error);
+  //   }
 
-    deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
-    deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
-    deviceInfoEmitter.addListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
-    deviceInfoEmitter.addListener('CAF_DocumentDetector_Error', documentDetectorError);
+  //   deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
+  //   deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
+  //   deviceInfoEmitter.addListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
+  //   deviceInfoEmitter.addListener('CAF_DocumentDetector_Error', documentDetectorError);
 
-    return () => {
-      deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
-      deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
-      deviceInfoEmitter.removeListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
-      deviceInfoEmitter.removeListener('CAF_DocumentDetector_Error', documentDetectorError);
-    };
-  }, [deviceInfoEmitter]);
+  //   return () => {
+  //     deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
+  //     deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
+  //     deviceInfoEmitter.removeListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
+  //     deviceInfoEmitter.removeListener('CAF_DocumentDetector_Error', documentDetectorError);
+  //   };
+  // }, [deviceInfoEmitter]);
 
   return (
     <>
@@ -50,7 +50,7 @@ const App: () => React$Node = () => {
               <Button style={styles.button}
                       title='PassiveFaceLiveness'
                       onPress={() => {
-                        NativeModules.CAF.passiveFaceLiveness();
+                        NativeModules.CombateAFraude.passiveFaceLiveness("")
                       }}/>
             </View>
 
@@ -61,14 +61,14 @@ const App: () => React$Node = () => {
               <Button style={styles.button}
                       title='DocumentDetector - CNH'
                       onPress={() => {
-                        NativeModules.CAF.documentDetectorCnh();
+                        // NativeModules.CAF.documentDetectorCnh();
                       }}/>
             </View>
             <View style={styles.sectionContainer}>
               <Button style={styles.button}
                       title='DocumentDetector - RG'
                       onPress={() => {
-                        NativeModules.CAF.documentDetectorRg();
+                        // NativeModules.CAF.documentDetectorRg();
                       }}/>
             </View>
 

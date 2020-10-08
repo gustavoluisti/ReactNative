@@ -6,8 +6,11 @@
 //
 
 #import "React/RCTBridgeModule.h"
-@interface RCT_EXTERN_MODULE(CombateAFraude, NSObject)
+#import "React/RCTEventEmitter.h"
+
+@interface RCT_EXTERN_MODULE(CombateAFraude, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(passiveFaceLiveness:(NSString *)mobileToken)
+RCT_EXTERN_METHOD(documentDetector:(NSString *)mobileToken documentType:(NSString *)documentType)
 
 @end

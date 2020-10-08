@@ -4,40 +4,54 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const App: () => React$Node = () => {
 
+  const mobileToken = "";
+
   const [passiveFaceLivenessResult, setPassiveFaceLivenessResult] = useState(null);
   const [documentDetectorResult, setDocumentDetectorResult] = useState(null);
-  // const deviceInfoEmitter = new NativeEventEmitter();
 
+  const combateAFraudeEmmiter = new NativeEventEmitter(NativeModules.CombateAFraude);
 
-  // useEffect(() => {
-  //   async function passiveFaceLivenessSuccess(params) {
-  //     setPassiveFaceLivenessResult("Selfie: "+params.selfiePath);
-  //   }
+  combateAFraudeEmmiter.addListener(
+    "PassiveFaceLiveness_Success",
+    res => {
+      setPassiveFaceLivenessResult("Selfie: "+res.imagePath);
+    }
+  )
 
-  //   async function passiveFaceLivenessError(params) {
-  //     setPassiveFaceLivenessResult("Erro: "+params.error);
-  //   }
+  combateAFraudeEmmiter.addListener(
+    "PassiveFaceLiveness_Error",
+    res => {
+      setPassiveFaceLivenessResult("Erro: "+res.message);
+    }
+  )
 
-  //   async function documentDetectorSuccess(params) {
-  //     setDocumentDetectorResult("Frente do documento: "+params.frontPath+"\n\nVerso do documento: "+params.backPath);
-  //   }
+  combateAFraudeEmmiter.addListener(
+    "PassiveFaceLiveness_Cancel",
+    res => {
+      setPassiveFaceLivenessResult("Usuário fechou");
+    }
+  )
 
-  //   async function documentDetectorError(params) {
-  //     setDocumentDetectorResult("Erro: "+params.error);
-  //   }
+  combateAFraudeEmmiter.addListener(
+    "DocumentDetector_Success",
+    res => {
+      setDocumentDetectorResult("Frente: "+res.captures[0].imagePath+"\nVerso: "+res.captures[1].imagePath);
+    }
+  )
 
-  //   deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
-  //   deviceInfoEmitter.addListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
-  //   deviceInfoEmitter.addListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
-  //   deviceInfoEmitter.addListener('CAF_DocumentDetector_Error', documentDetectorError);
+  combateAFraudeEmmiter.addListener(
+    "DocumentDetector_Error",
+    res => {
+      setDocumentDetectorResult("Erro: "+res.message);
+    }
+  )
 
-  //   return () => {
-  //     deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Success', passiveFaceLivenessSuccess);
-  //     deviceInfoEmitter.removeListener('CAF_PassiveFaceLiveness_Error', passiveFaceLivenessError);
-  //     deviceInfoEmitter.removeListener('CAF_DocumentDetector_Success', documentDetectorSuccess);
-  //     deviceInfoEmitter.removeListener('CAF_DocumentDetector_Error', documentDetectorError);
-  //   };
-  // }, [deviceInfoEmitter]);
+  combateAFraudeEmmiter.addListener(
+    "DocumentDetector_Cancel",
+    res => {
+      setDocumentDetectorResult("Usuário fechou");
+    }
+  )
 
   return (
     <>
@@ -50,7 +64,7 @@ const App: () => React$Node = () => {
               <Button style={styles.button}
                       title='PassiveFaceLiveness'
                       onPress={() => {
-                        NativeModules.CombateAFraude.passiveFaceLiveness("")
+                        NativeModules.CombateAFraude.passiveFaceLiveness(mobileToken)
                       }}/>
             </View>
 
@@ -61,14 +75,14 @@ const App: () => React$Node = () => {
               <Button style={styles.button}
                       title='DocumentDetector - CNH'
                       onPress={() => {
-                        // NativeModules.CAF.documentDetectorCnh();
+                        NativeModules.CombateAFraude.documentDetector(mobileToken, "CNH");
                       }}/>
             </View>
             <View style={styles.sectionContainer}>
               <Button style={styles.button}
                       title='DocumentDetector - RG'
                       onPress={() => {
-                        // NativeModules.CAF.documentDetectorRg();
+                        NativeModules.CombateAFraude.documentDetector(mobileToken, "RG");
                       }}/>
             </View>
 

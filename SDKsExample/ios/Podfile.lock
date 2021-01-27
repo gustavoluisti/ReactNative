@@ -1,8 +1,6 @@
 PODS:
-  - Alamofire (5.2.0)
   - boost-for-react-native (1.63.0)
-  - DocumentDetector (3.1.0):
-    - Alamofire (= 5.2)
+  - DocumentDetector (4.2.2):
     - Sentry (= 5.2.0)
     - TensorFlowLiteSwift (= 2.1.0)
   - DoubleConversion (1.1.6)
@@ -24,8 +22,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - PassiveFaceLiveness (2.2.0):
-    - Alamofire (= 5.2)
+  - PassiveFaceLiveness (3.1.2):
     - Sentry (= 5.2.0)
   - RCTRequired (0.63.3)
   - RCTTypeSafety (0.63.3):
@@ -262,13 +259,13 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - DocumentDetector (~> 3.1.0)
+  - DocumentDetector (~> 4.2.2)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - PassiveFaceLiveness (~> 2.2.0)
+  - PassiveFaceLiveness (~> 3.1.2)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -298,7 +295,6 @@ SPEC REPOS:
     - DocumentDetector
     - PassiveFaceLiveness
   trunk:
-    - Alamofire
     - boost-for-react-native
     - Sentry
     - TensorFlowLiteC
@@ -359,15 +355,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Alamofire: c1ca147559e730bfb2182c8c7aafbdd90a867987
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DocumentDetector: 54244871404753d9af5304a4de773dcdca6573d8
+  DocumentDetector: 00939c91291c6ade0850738e672dc6b56842f6a6
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 878b59e31113e289e275165efbe4b54fa614d43d
   FBReactNativeSpec: 7da9338acfb98d4ef9e5536805a0704572d33c2f
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  PassiveFaceLiveness: 52d6dcdd78845e963aada79e6fe27614c11bbbf5
+  PassiveFaceLiveness: 401e20fbff4877cf4b6e95fda1c1cdf1f79faa19
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
   RCTTypeSafety: edf4b618033c2f1c5b7bc3d90d8e085ed95ba2ab
   React: f36e90f3ceb976546e97df3403e37d226f79d0e3
@@ -393,6 +388,6 @@ SPEC CHECKSUMS:
   TensorFlowLiteSwift: 9d8137f18d5ac30ca89bba4fbe118e0949ac5743
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: 5ba16aac958541a5dae915abed71b60101b8319d
+PODFILE CHECKSUM: b88495f2b520f07a31a1777780e5f42e88001af0
 
 COCOAPODS: 1.10.0

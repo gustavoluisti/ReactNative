@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, NativeEventEmitter, NativeModules, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
+
 const App: () => React$Node = () => {
+
+  
 
   const mobileToken = "";
 
@@ -11,47 +14,54 @@ const App: () => React$Node = () => {
 
   const combateAFraudeEmmiter = new NativeEventEmitter(NativeModules.CombateAFraude);
 
-  combateAFraudeEmmiter.addListener(
-    "PassiveFaceLiveness_Success",
-    res => {
-      setPassiveFaceLivenessResult("Selfie: "+res.imagePath);
-    }
-  )
 
-  combateAFraudeEmmiter.addListener(
-    "PassiveFaceLiveness_Error",
-    res => {
-      setPassiveFaceLivenessResult("Erro: "+res.message);
-    }
-  )
+     useEffect(() => {
+      combateAFraudeEmmiter.addListener(
+        "PassiveFaceLiveness_Success",
+        res => {
+          console.log('p');
+          setPassiveFaceLivenessResult("Selfie: "+res.imagePath);
+        }
+      )
+    
+      combateAFraudeEmmiter.addListener(
+        "PassiveFaceLiveness_Error",
+        res => {
+          setPassiveFaceLivenessResult("Erro: "+res.message);
+        }
+      )
+    
+      combateAFraudeEmmiter.addListener(
+        "PassiveFaceLiveness_Cancel",
+        res => {
+          setPassiveFaceLivenessResult("Usuário fechou");
+        }
+      )
 
-  combateAFraudeEmmiter.addListener(
-    "PassiveFaceLiveness_Cancel",
-    res => {
-      setPassiveFaceLivenessResult("Usuário fechou");
-    }
-  )
+      combateAFraudeEmmiter.addListener(
+        "DocumentDetector_Success",
+        
+        res => {
+          console.log('a');
+          setDocumentDetectorResult("Frente: "+res.captures[0].imagePath+"\nVerso: "+res.captures[1].imagePath);
+        }
+      )
+  
+      combateAFraudeEmmiter.addListener(
+        "DocumentDetector_Error",
+        res => {
+          setDocumentDetectorResult("Erro: "+res.message);
+        }
+      )
+    
+      combateAFraudeEmmiter.addListener(
+        "DocumentDetector_Cancel",
+        res => {
+          setDocumentDetectorResult("Usuário fechou");
+        }
+      )
 
-  combateAFraudeEmmiter.addListener(
-    "DocumentDetector_Success",
-    res => {
-      setDocumentDetectorResult("Frente: "+res.captures[0].imagePath+"\nVerso: "+res.captures[1].imagePath);
-    }
-  )
-
-  combateAFraudeEmmiter.addListener(
-    "DocumentDetector_Error",
-    res => {
-      setDocumentDetectorResult("Erro: "+res.message);
-    }
-  )
-
-  combateAFraudeEmmiter.addListener(
-    "DocumentDetector_Cancel",
-    res => {
-      setDocumentDetectorResult("Usuário fechou");
-    }
-  )
+   }, []);
 
   return (
     <>
@@ -63,7 +73,7 @@ const App: () => React$Node = () => {
             <View style={styles.sectionContainer}>
               <Button style={styles.button}
                       title='PassiveFaceLiveness'
-                      onPress={() => {
+                      onPress={() => { 
                         NativeModules.CombateAFraude.passiveFaceLiveness(mobileToken)
                       }}/>
             </View>
@@ -96,6 +106,8 @@ const App: () => React$Node = () => {
   );
 };
 
+
+
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: Colors.lighter,
@@ -113,5 +125,7 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
 });
+
+
 
 export default App;

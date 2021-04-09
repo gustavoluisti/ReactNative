@@ -1,8 +1,8 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - DocumentDetector (4.2.2):
+  - DocumentDetector (4.4.0):
     - Sentry (= 5.2.0)
-    - TensorFlowLiteSwift (= 2.1.0)
+    - TensorFlowLiteSwift (= 2.4.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.63.3)
   - FBReactNativeSpec (0.63.3):
@@ -22,7 +22,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - PassiveFaceLiveness (3.1.2):
+  - PassiveFaceLiveness (3.2.1):
     - Sentry (= 5.2.0)
   - RCTRequired (0.63.3)
   - RCTTypeSafety (0.63.3):
@@ -253,19 +253,23 @@ PODS:
   - Sentry (5.2.0):
     - Sentry/Core (= 5.2.0)
   - Sentry/Core (5.2.0)
-  - TensorFlowLiteC (2.1.0)
-  - TensorFlowLiteSwift (2.1.0):
-    - TensorFlowLiteC (= 2.1.0)
+  - TensorFlowLiteC (2.4.0):
+    - TensorFlowLiteC/Core (= 2.4.0)
+  - TensorFlowLiteC/Core (2.4.0)
+  - TensorFlowLiteSwift (2.4.0):
+    - TensorFlowLiteSwift/Core (= 2.4.0)
+  - TensorFlowLiteSwift/Core (2.4.0):
+    - TensorFlowLiteC (= 2.4.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - DocumentDetector (~> 4.2.2)
+  - DocumentDetector (~> 4.4.0)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - PassiveFaceLiveness (~> 3.1.2)
+  - PassiveFaceLiveness (~> 3.2.1)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -356,13 +360,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DocumentDetector: 00939c91291c6ade0850738e672dc6b56842f6a6
+  DocumentDetector: bcaaa79055d9ff7c27ebfd5cc30522ec8128a429
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 878b59e31113e289e275165efbe4b54fa614d43d
   FBReactNativeSpec: 7da9338acfb98d4ef9e5536805a0704572d33c2f
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  PassiveFaceLiveness: 401e20fbff4877cf4b6e95fda1c1cdf1f79faa19
+  PassiveFaceLiveness: 0cc07b96f578920e721ed5e88102daacab6263e4
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
   RCTTypeSafety: edf4b618033c2f1c5b7bc3d90d8e085ed95ba2ab
   React: f36e90f3ceb976546e97df3403e37d226f79d0e3
@@ -384,10 +388,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 8e9fb25724a0805107fc1acc9075e26f814df454
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   Sentry: 6e04bc3e11bf771ca79140a112de64dcfbc7d8cb
-  TensorFlowLiteC: 215603d4426d93810eace5947e317389554a4b66
-  TensorFlowLiteSwift: 9d8137f18d5ac30ca89bba4fbe118e0949ac5743
+  TensorFlowLiteC: 09f8ac75a76caeadb19bcfa694e97454cc1ecf87
+  TensorFlowLiteSwift: f062dc1178120100d825d7799fd9f115b4a37fee
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: b88495f2b520f07a31a1777780e5f42e88001af0
+PODFILE CHECKSUM: dea9bd786c0c8198f3094404cda0a5a2b2344059
 
 COCOAPODS: 1.10.0

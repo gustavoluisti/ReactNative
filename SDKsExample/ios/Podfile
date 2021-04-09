@@ -1,6 +1,8 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
+ENV['SWIFT_VERSION'] = '5'
+
 platform :ios, '11.0'
 use_frameworks!
 
@@ -10,7 +12,7 @@ target 'SDKsExample' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'DocumentDetector', '~> 4.4.0'
-  pod 'PassiveFaceLiveness', '~> 3.2.1'
+  pod 'PassiveFaceLiveness', '~> 3.3.0'
 
   target 'SDKsExampleTests' do
     inherit! :complete

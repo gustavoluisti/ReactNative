@@ -5,8 +5,6 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const App: () => React$Node = () => {
 
-  
-
   const mobileToken = "";
 
   const [passiveFaceLivenessResult, setPassiveFaceLivenessResult] = useState(null);
@@ -14,12 +12,11 @@ const App: () => React$Node = () => {
 
   const combateAFraudeEmmiter = new NativeEventEmitter(NativeModules.CombateAFraude);
 
-
+    //PassiveFaceLiveness
      useEffect(() => {
       combateAFraudeEmmiter.addListener(
         "PassiveFaceLiveness_Success",
         res => {
-          console.log('p');
           setPassiveFaceLivenessResult("Selfie: "+res.imagePath);
         }
       )
@@ -38,11 +35,11 @@ const App: () => React$Node = () => {
         }
       )
 
+      //DocumentDetector
       combateAFraudeEmmiter.addListener(
         "DocumentDetector_Success",
         
         res => {
-          console.log('a');
           setDocumentDetectorResult("Frente: "+res.captures[0].imagePath+"\nVerso: "+res.captures[1].imagePath);
         }
       )
@@ -58,6 +55,32 @@ const App: () => React$Node = () => {
         "DocumentDetector_Cancel",
         res => {
           setDocumentDetectorResult("Usuário fechou");
+        }
+      )
+
+      //FaceAuthenticator
+      combateAFraudeEmmiter.addListener(
+        "FaceAuthenticator_Success",
+        res => {
+          if(res.authenticated){
+            console.log("Usuário autenticado!");
+          }else{
+            console.log("Usuário não-autenticado!")
+          }
+        }
+      )
+
+      combateAFraudeEmmiter.addListener(
+        "FaceAuthenticator_Cancel",
+        res => {
+          console.log("Usuário fechou");
+        }
+      )
+
+      combateAFraudeEmmiter.addListener(
+        "FaceAuthenticator_Error",
+        res => {
+          console.log("Erro: "+res.message);
         }
       )
 
@@ -99,14 +122,20 @@ const App: () => React$Node = () => {
             <View style={styles.sectionContainer}>
               <Text>{'DocumentDetectorResult: ' + documentDetectorResult}</Text>
             </View>
+
+            <View style={styles.sectionContainer}>
+              <Button style={styles.button}
+                      title='FaceAuthenticator'
+                      onPress={() => { 
+                        NativeModules.CombateAFraude.faceAuthenticator(mobileToken, "00000000000")
+                      }}/>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
     </>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -125,7 +154,5 @@ const styles = StyleSheet.create({
     color: Colors.black,
   },
 });
-
-
 
 export default App;

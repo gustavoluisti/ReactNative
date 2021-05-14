@@ -197,6 +197,7 @@ dependencies {
 
     implementation 'com.combateafraude.sdk:passive-face-liveness:4.7.0'
     implementation 'com.combateafraude.sdk:document-detector:6.7.5'
+    implementation 'com.combateafraude.sdk:face-authenticator:4.2.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

@@ -9,6 +9,7 @@ const App: () => React$Node = () => {
 
   const [passiveFaceLivenessResult, setPassiveFaceLivenessResult] = useState(null);
   const [documentDetectorResult, setDocumentDetectorResult] = useState(null);
+  const [faceAuthenticatorResult, setFaceAuthenticatorResult] = useState(null);
 
   const combateAFraudeEmmiter = new NativeEventEmitter(NativeModules.CombateAFraude);
 
@@ -62,25 +63,21 @@ const App: () => React$Node = () => {
       combateAFraudeEmmiter.addListener(
         "FaceAuthenticator_Success",
         res => {
-          if(res.authenticated){
-            console.log("Usuário autenticado!");
-          }else{
-            console.log("Usuário não-autenticado!")
-          }
+          setFaceAuthenticatorResult("Autenticado: "+res.authenticated);
         }
       )
 
       combateAFraudeEmmiter.addListener(
         "FaceAuthenticator_Cancel",
         res => {
-          console.log("Usuário fechou");
+          setFaceAuthenticatorResult("Usuário fechou");
         }
       )
 
       combateAFraudeEmmiter.addListener(
         "FaceAuthenticator_Error",
         res => {
-          console.log("Erro: "+res.message);
+          setFaceAuthenticatorResult("Erro: "+res.message);
         }
       )
 
@@ -129,6 +126,10 @@ const App: () => React$Node = () => {
                       onPress={() => { 
                         NativeModules.CombateAFraude.faceAuthenticator(mobileToken, "00000000000")
                       }}/>
+            </View>
+
+            <View style={styles.sectionContainer}>
+              <Text>{'FaceAuthenticatorResult: ' + faceAuthenticatorResult}</Text>
             </View>
           </View>
         </ScrollView>

@@ -12,5 +12,6 @@
 
 RCT_EXTERN_METHOD(passiveFaceLiveness:(NSString *)mobileToken)
 RCT_EXTERN_METHOD(documentDetector:(NSString *)mobileToken documentType:(NSString *)documentType)
+RCT_EXTERN_METHOD(faceAuthenticator:(NSString *)mobileToken CPF:(NSString *)CPF)
 
 @end

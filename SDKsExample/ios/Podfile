@@ -11,8 +11,9 @@ target 'SDKsExample' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'DocumentDetector', '~> 4.4.0'
-  pod 'PassiveFaceLiveness', '~> 3.3.0'
+  pod 'DocumentDetector', '~> 4.4.2'
+  pod 'PassiveFaceLiveness', '~> 3.3.2'
+  pod 'FaceAuthenticator', '~> 2.3.2'
 
   target 'SDKsExampleTests' do
     inherit! :complete

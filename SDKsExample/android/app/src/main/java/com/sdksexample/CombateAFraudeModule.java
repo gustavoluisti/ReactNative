@@ -3,11 +3,14 @@ package com.sdksexample;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.combateafraude.documentdetector.input.CaptureMode;
+import com.combateafraude.documentdetector.input.CaptureStage;
 import com.combateafraude.faceauthenticator.FaceAuthenticatorActivity;
 import com.combateafraude.faceauthenticator.input.FaceAuthenticator;
 import com.combateafraude.faceauthenticator.output.FaceAuthenticatorResult;
 import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.combateafraude.passivefaceliveness.input.PassiveFaceLiveness;
@@ -33,16 +36,15 @@ public class CombateAFraudeModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
-                if (intent == null) {
-                    return;
-                }
-
-                if (requestCode == REQUEST_CODE_PASSIVE_FACE_LIVENESS){
-                    try {
-                        PassiveFaceLivenessResult passiveFaceLivenessResult = (PassiveFaceLivenessResult) intent.getSerializableExtra(PassiveFaceLivenessResult.PARAMETER_NAME);
+                try {
+                    if (requestCode == REQUEST_CODE_PASSIVE_FACE_LIVENESS) {
                         if (intent == null) {
                             getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("PassiveFaceLiveness_Cancel", null);
-                        } else if (passiveFaceLivenessResult.wasSuccessful()) {
+                            return;
+                        }
+
+                        PassiveFaceLivenessResult passiveFaceLivenessResult = (PassiveFaceLivenessResult) intent.getSerializableExtra(PassiveFaceLivenessResult.PARAMETER_NAME);
+                        if (passiveFaceLivenessResult.wasSuccessful()) {
                             WritableMap writableMap = new WritableNativeMap();
 
                             writableMap.putString("imagePath", passiveFaceLivenessResult.getImagePath());
@@ -59,25 +61,25 @@ public class CombateAFraudeModule extends ReactContextBaseJavaModule {
 
                             getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("PassiveFaceLiveness_Error", writableMap);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (requestCode == REQUEST_CODE_DOCUMENT_DETECTOR){
-                    try {
-                        DocumentDetectorResult documentDetectorResult = (DocumentDetectorResult) intent.getSerializableExtra(DocumentDetectorResult.PARAMETER_NAME);
+
+                    } else if (requestCode == REQUEST_CODE_DOCUMENT_DETECTOR) {
                         if (intent == null) {
                             getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("DocumentDetector_Cancel", null);
-                        } else if (documentDetectorResult.wasSuccessful()) {
+                            return;
+                        }
+
+                        DocumentDetectorResult documentDetectorResult = (DocumentDetectorResult) intent.getSerializableExtra(DocumentDetectorResult.PARAMETER_NAME);
+                        if (documentDetectorResult.wasSuccessful()) {
                             WritableMap writableMap = new WritableNativeMap();
 
                             WritableArray capturesArray = new WritableNativeArray();
-                            for (Capture capture: documentDetectorResult.getCaptures()) {
+                            for (Capture capture : documentDetectorResult.getCaptures()) {
                                 WritableMap captureMap = new WritableNativeMap();
 
                                 captureMap.putString("imagePath", capture.getImagePath());
                                 captureMap.putString("imageUrl", capture.getImageUrl());
                                 captureMap.putString("label", capture.getLabel());
-                                captureMap.putDouble("quality", capture.getQuality());
+                                captureMap.putDouble("quality", capture.getQuality() != null ? capture.getQuality() : 0.0);
 
                                 capturesArray.pushMap(captureMap);
                             }
@@ -94,28 +96,31 @@ public class CombateAFraudeModule extends ReactContextBaseJavaModule {
 
                             getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("DocumentDetector_Error", writableMap);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else if (requestCode == REQUEST_CODE_FACE_AUTHENTICATOR) {
+                        if (intent == null) {
+                            getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("FaceAuthenticator_Cancel", null);
+                            return;
+                        }
+
+                        FaceAuthenticatorResult faceAuthenticatorResult = (FaceAuthenticatorResult) intent.getSerializableExtra(FaceAuthenticatorResult.PARAMETER_NAME);
+                        if (faceAuthenticatorResult.wasSuccessful()) {
+                            WritableMap writableMap = new WritableNativeMap();
+
+                            writableMap.putBoolean("authenticated", faceAuthenticatorResult.isAuthenticated());
+                            writableMap.putString("signedResponse", faceAuthenticatorResult.getSignedResponse());
+                            writableMap.putString("trackingId", faceAuthenticatorResult.getTrackingId());
+                            getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("FaceAuthenticator_Success", writableMap);
+                        } else {
+                            WritableMap writableMap = new WritableNativeMap();
+
+                            writableMap.putString("message", faceAuthenticatorResult.getSdkFailure().getMessage());
+                            writableMap.putString("type", faceAuthenticatorResult.getSdkFailure().getClass().getSimpleName());
+
+                            getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("FaceAuthenticator_Error", writableMap);
+                        }
                     }
-                }else if(requestCode == REQUEST_CODE_FACE_AUTHENTICATOR){
-                    FaceAuthenticatorResult faceAuthenticatorResult = (FaceAuthenticatorResult) intent.getSerializableExtra(FaceAuthenticatorResult.PARAMETER_NAME);
-                    if (intent == null) {
-                        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("FaceAuthenticator_Cancel", null);
-                    }else if(faceAuthenticatorResult.wasSuccessful()){
-                        WritableMap writableMap = new WritableNativeMap();
-
-                        writableMap.putBoolean("authenticated", faceAuthenticatorResult.isAuthenticated());
-                        writableMap.putString("signedResponse", faceAuthenticatorResult.getSignedResponse());
-                        writableMap.putString("trackingId", faceAuthenticatorResult.getTrackingId());
-                        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("FaceAuthenticator_Success", writableMap);
-                    }else{
-                        WritableMap writableMap = new WritableNativeMap();
-
-                        writableMap.putString("message", faceAuthenticatorResult.getSdkFailure().getMessage());
-                        writableMap.putString("type", faceAuthenticatorResult.getSdkFailure().getClass().getSimpleName());
-
-                        getReactApplicationContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("FaceAuthenticator_Error", writableMap);
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -149,24 +154,24 @@ public class CombateAFraudeModule extends ReactContextBaseJavaModule {
         try {
             DocumentDetector.Builder documentDetectorBuilder = new DocumentDetector.Builder(mobileToken);
 
-            if (documentType.equals("CNH")){
+            if (documentType.equals("CNH")) {
                 documentDetectorBuilder.setDocumentSteps(new DocumentDetectorStep[]{
-                    new DocumentDetectorStep(Document.CNH_FRONT),
-                    new DocumentDetectorStep(Document.CNH_BACK)
+                        new DocumentDetectorStep(Document.CNH_FRONT),
+                        new DocumentDetectorStep(Document.CNH_BACK)
                 });
-            } else if (documentType.equals("RG")){
+            } else if (documentType.equals("RG")) {
                 documentDetectorBuilder.setDocumentSteps(new DocumentDetectorStep[]{
-                    new DocumentDetectorStep(Document.RG_FRONT),
-                    new DocumentDetectorStep(Document.RG_BACK)
+                        new DocumentDetectorStep(Document.RG_FRONT),
+                        new DocumentDetectorStep(Document.RG_BACK)
                 });
-            } else if (documentType.equals("RNE")){
+            } else if (documentType.equals("RNE")) {
                 documentDetectorBuilder.setDocumentSteps(new DocumentDetectorStep[]{
-                    new DocumentDetectorStep(Document.RNE_FRONT),
-                    new DocumentDetectorStep(Document.RNE_BACK)
+                        new DocumentDetectorStep(Document.RNE_FRONT),
+                        new DocumentDetectorStep(Document.RNE_BACK)
                 });
-            } else if (documentType.equals("CRLV")){
+            } else if (documentType.equals("CRLV")) {
                 documentDetectorBuilder.setDocumentSteps(new DocumentDetectorStep[]{
-                    new DocumentDetectorStep(Document.CRLV)
+                        new DocumentDetectorStep(Document.CRLV)
                 });
             }
 

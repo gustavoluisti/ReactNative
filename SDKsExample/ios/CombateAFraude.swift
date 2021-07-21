@@ -48,11 +48,11 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
     sendEvent(withName: "PassiveFaceLiveness_Success", body: response)
   }
   
-  func passiveFaceLivenessControllerDidCancel(_ passiveFacelivenessController: PassiveFaceLivenessController) {
+  func sendEventCancelPassiveFaceLiveness(){
     sendEvent(withName: "PassiveFaceLiveness_Cancel", body: nil)
   }
   
-  func passiveFaceLivenessController(_ passiveFacelivenessController: PassiveFaceLivenessController, didFailWithError error: PassiveFaceLivenessFailure) {
+  func sendEventWithErrorPassiveFaceLiveness(_ error: PassiveFaceLivenessFailure){
     let response : NSMutableDictionary! = [:]
     
     response["message"] = error.message
@@ -91,16 +91,32 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
     DispatchQueue.main.async {
       let currentViewController = UIApplication.shared.keyWindow!.rootViewController
       
-      let sdkViewController = DocumentDetectorController(documentDetector: documentDetectorBuilder.build())
-      sdkViewController.documentDetectorDelegate = self
+      let popupStoryboard = UIStoryboard(name: "DetectorView", bundle: Bundle(for: type(of: self)))
       
-      currentViewController?.present(sdkViewController, animated: true, completion: nil)
+      if let detectorViewController = popupStoryboard.instantiateViewController(withIdentifier: "DetectorViewController") as? DetectorViewController {
+        
+        detectorViewController.module = self
+        detectorViewController.documentDetector = documentDetectorBuilder.build()
+        
+        currentViewController?.present(detectorViewController, animated: true, completion: nil)
+      }
     }
   }
   
   func documentDetectionController(_ scanner: DocumentDetectorController, didFinishWithResults results: DocumentDetectorResult) {
+    sendEventWithResultsDocumentDetector(results)
+  }
+  
+  func documentDetectionControllerDidCancel(_ scanner: DocumentDetectorController) {
+    sendEventCancelDocumentDetector()
+  }
+  
+  func documentDetectionController(_ scanner: DocumentDetectorController, didFailWithError error: DocumentDetectorFailure) {
+    sendEventWithErrorDocumentDetector(error)
+  }
+  
+  func sendEventWithResultsDocumentDetector(_ results: DocumentDetectorResult){
     let response : NSMutableDictionary! = [:]
-    
     var captureMap : [NSMutableDictionary?]  = []
     for index in (0 ... results.captures.count - 1) {
       let capture : NSMutableDictionary! = [:]
@@ -119,11 +135,11 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
     sendEvent(withName: "DocumentDetector_Success", body: response)
   }
   
-  func documentDetectionControllerDidCancel(_ scanner: DocumentDetectorController) {
+  func sendEventCancelDocumentDetector(){
     sendEvent(withName: "DocumentDetector_Cancel", body: nil)
   }
   
-  func documentDetectionController(_ scanner: DocumentDetectorController, didFailWithError error: DocumentDetectorFailure) {
+  func sendEventWithErrorDocumentDetector(_ error: DocumentDetectorFailure){
     let response : NSMutableDictionary! = [:]
     
     response["message"] = error.message
@@ -159,7 +175,7 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
   @objc(faceAuthenticator:CPF:)
   func faceAuthenticator(mobileToken: String, CPF: String) {
     let faceAuthenticator = FaceAuthenticator.Builder(mobileToken: mobileToken)
-      .setPeopleId(CPF)
+      .setPersonId(CPF)
       .build()
     
     DispatchQueue.main.async {

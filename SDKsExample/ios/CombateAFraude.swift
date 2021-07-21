@@ -29,14 +29,31 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
     DispatchQueue.main.async {
       let currentViewController = UIApplication.shared.keyWindow!.rootViewController
       
-      let sdkViewController = PassiveFaceLivenessController(passiveFaceLiveness: passiveFaceLiveness)
-      sdkViewController.passiveFaceLivenessDelegate = self
+      let popupStoryboard = UIStoryboard(name: "LivenessView", bundle: Bundle(for: type(of: self)))
       
-      currentViewController?.present(sdkViewController, animated: true, completion: nil)
+      if let livenessViewController = popupStoryboard.instantiateViewController(withIdentifier: "LivenessViewController") as? LivenessViewController {
+        
+        livenessViewController.module = self
+        livenessViewController.passiveFaceLiveness = passiveFaceLiveness
+        
+        currentViewController?.present(livenessViewController, animated: true, completion: nil)
+      }
     }
   }
   
   func passiveFaceLivenessController(_ passiveFacelivenessController: PassiveFaceLivenessController, didFinishWithResults results: PassiveFaceLivenessResult) {
+    sendEventWithResultsPassiveFaceLiveness(results)
+  }
+  
+  func passiveFaceLivenessControllerDidCancel(_ passiveFacelivenessController: PassiveFaceLivenessController) {
+    sendEventCancelPassiveFaceLiveness()
+  }
+  
+  func passiveFaceLivenessController(_ passiveFacelivenessController: PassiveFaceLivenessController, didFailWithError error: PassiveFaceLivenessFailure) {
+    sendEventWithErrorPassiveFaceLiveness(error)
+  }
+  
+  func sendEventWithResultsPassiveFaceLiveness(_ results: PassiveFaceLivenessResult){
     let response : NSMutableDictionary! = [:]
     
     let imagePath = saveImageToDocumentsDirectory(image: results.image, withName: "selfie.jpg")
@@ -189,7 +206,18 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
   }
   
   func faceAuthenticatorController(_ faceAuthenticatorController: FaceAuthenticatorController, didFinishWithResults results: FaceAuthenticatorResult) {
-    
+    sendEventWithResultsFaceAuthenticator(results)
+  }
+  
+  func faceAuthenticatorControllerDidCancel(_ faceAuthenticatorController: FaceAuthenticatorController) {
+    sendEventCancelFaceAuthenticator()
+  }
+  
+  func faceAuthenticatorController(_ faceAuthenticatorController: FaceAuthenticatorController, didFailWithError error: FaceAuthenticatorFailure) {
+    sendEventWithErrorFaceAuthenticator(error)
+  }
+  
+  func sendEventWithResultsFaceAuthenticator(_ results: FaceAuthenticatorResult){
     let response : NSMutableDictionary! = [:]
     
     response["authenticated"] = results.authenticated
@@ -197,22 +225,18 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
     response["trackingId"] = results.trackingId
     
     sendEvent(withName: "FaceAuthenticator_Success", body: response)
-    
   }
   
-  func faceAuthenticatorControllerDidCancel(_ faceAuthenticatorController: FaceAuthenticatorController) {
-    let response : NSMutableDictionary! = [:]
-    
+  func sendEventCancelFaceAuthenticator(){
     sendEvent(withName: "FaceAuthenticator_Cancel", body: nil)
   }
   
-  func faceAuthenticatorController(_ faceAuthenticatorController: FaceAuthenticatorController, didFailWithError error: FaceAuthenticatorFailure) {
+  func sendEventWithErrorFaceAuthenticator(_ error: FaceAuthenticatorFailure){
     let response : NSMutableDictionary! = [:]
     
     response["message"] = error.message
     response["type"] = String(describing: type(of: error))
     sendEvent(withName: "FaceAuthenticator_Error", body: response)
-    
   }
   
   override func supportedEvents() -> [String]! {

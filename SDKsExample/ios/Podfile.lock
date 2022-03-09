@@ -1,11 +1,11 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - DocumentDetector (4.4.2):
-    - Sentry (= 5.2.0)
+  - DocumentDetector (6.2.0):
+    - Sentry (= 7.1.3)
     - TensorFlowLiteSwift (= 2.4.0)
   - DoubleConversion (1.1.6)
-  - FaceAuthenticator (2.3.2):
-    - Sentry (= 5.2.0)
+  - FaceAuthenticator (5.1.0):
+    - Sentry (= 7.1.3)
   - FBLazyVector (0.63.3)
   - FBReactNativeSpec (0.63.3):
     - Folly (= 2020.01.13.00)
@@ -24,8 +24,8 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - PassiveFaceLiveness (3.3.2):
-    - Sentry (= 5.2.0)
+  - PassiveFaceLiveness (5.7.0):
+    - Sentry (= 7.1.3)
   - RCTRequired (0.63.3)
   - RCTTypeSafety (0.63.3):
     - FBLazyVector (= 0.63.3)
@@ -252,9 +252,9 @@ PODS:
     - React-Core (= 0.63.3)
     - React-cxxreact (= 0.63.3)
     - React-jsi (= 0.63.3)
-  - Sentry (5.2.0):
-    - Sentry/Core (= 5.2.0)
-  - Sentry/Core (5.2.0)
+  - Sentry (7.1.3):
+    - Sentry/Core (= 7.1.3)
+  - Sentry/Core (7.1.3)
   - TensorFlowLiteC (2.4.0):
     - TensorFlowLiteC/Core (= 2.4.0)
   - TensorFlowLiteC/Core (2.4.0)
@@ -265,14 +265,14 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - DocumentDetector (~> 4.4.2)
+  - DocumentDetector (= 6.2.0)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - FaceAuthenticator (~> 2.3.2)
+  - FaceAuthenticator (= 5.1.0)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - PassiveFaceLiveness (~> 3.3.2)
+  - PassiveFaceLiveness (= 5.7.0)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -364,14 +364,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  DocumentDetector: 385eb1b6d2ab8e23a75d04544ae82c85a62d59eb
+  DocumentDetector: 977652e5daf929971e6ecf4a9c419e69ece97823
   DoubleConversion: cde416483dac037923206447da6e1454df403714
-  FaceAuthenticator: bf83e012e95e2e8ff2520eb893844394f6d7a898
+  FaceAuthenticator: 6ecbe6fb6cb1491b8570aef41518d4aecf47adbe
   FBLazyVector: 878b59e31113e289e275165efbe4b54fa614d43d
   FBReactNativeSpec: 7da9338acfb98d4ef9e5536805a0704572d33c2f
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  PassiveFaceLiveness: e96afa087d34fb10441be65008d0b4d8277bf869
+  PassiveFaceLiveness: 9f7ac77cedf3c7855da5bab8e37b08dedc69caa3
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
   RCTTypeSafety: edf4b618033c2f1c5b7bc3d90d8e085ed95ba2ab
   React: f36e90f3ceb976546e97df3403e37d226f79d0e3
@@ -392,11 +392,11 @@ SPEC CHECKSUMS:
   React-RCTText: 65a6de06a7389098ce24340d1d3556015c38f746
   React-RCTVibration: 8e9fb25724a0805107fc1acc9075e26f814df454
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
-  Sentry: 6e04bc3e11bf771ca79140a112de64dcfbc7d8cb
+  Sentry: 6d963d64804dd06d96e778be729613f481394312
   TensorFlowLiteC: 09f8ac75a76caeadb19bcfa694e97454cc1ecf87
   TensorFlowLiteSwift: f062dc1178120100d825d7799fd9f115b4a37fee
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
 
-PODFILE CHECKSUM: e8deba7a0b7f79d28278eefc05c338ca5577d5ff
+PODFILE CHECKSUM: 360adfc740141990e75e59eb9219d398031b8fa9
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

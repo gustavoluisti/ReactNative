@@ -23,9 +23,10 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
   
   @objc(passiveFaceLiveness:)
   func passiveFaceLiveness(mobileToken: String) {
-    let passiveFaceLiveness = PassiveFaceLiveness.Builder(mobileToken: mobileToken)
+    let passiveFaceLiveness = PassiveFaceLivenessSdk.Builder(mobileToken: mobileToken)
+      .enableMultiLanguage(enable: false)
       .build()
-    
+        
     DispatchQueue.main.async {
       let currentViewController = UIApplication.shared.keyWindow!.rootViewController
       
@@ -39,8 +40,14 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
   func passiveFaceLivenessController(_ passiveFacelivenessController: PassiveFaceLivenessController, didFinishWithResults results: PassiveFaceLivenessResult) {
     let response : NSMutableDictionary! = [:]
     
-    let imagePath = saveImageToDocumentsDirectory(image: results.image, withName: "selfie.jpg")
-    response["imagePath"] = imagePath
+    if let image = results.image {
+      let imagePath = saveImageToDocumentsDirectory(image: image, withName: "selfie.jpg")
+      response["imagePath"] = imagePath
+    }else{
+      response["imagePath"] = results.capturePath
+    }
+  
+    response["success"] = NSNumber(value: true)
     response["imageUrl"] = results.imageUrl
     response["signedResponse"] = results.signedResponse
     response["trackingId"] = results.trackingId
@@ -65,25 +72,27 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
   
   @objc(documentDetector:documentType:)
   func documentDetector(mobileToken: String, documentType: String) {
-    let documentDetectorBuilder = DocumentDetector.Builder(mobileToken: mobileToken)
+    let documentDetectorBuilder = DocumentDetectorSdk.Builder(mobileToken: mobileToken)
+    
+    _ = documentDetectorBuilder.enableMultiLanguage(enable: false)
     
     if (documentType == "RG"){
-      documentDetectorBuilder.setDocumentDetectorFlow(flow :[
+      _ = documentDetectorBuilder.setDocumentDetectorFlow(flow :[
         DocumentDetectorStep(document: Document.RG_FRONT, stepLabel: nil, illustration: nil, audio: nil),
         DocumentDetectorStep(document: Document.RG_BACK, stepLabel: nil, illustration: nil, audio: nil)
       ])
     } else if (documentType == "CNH"){
-      documentDetectorBuilder.setDocumentDetectorFlow(flow :[
+      _ = documentDetectorBuilder.setDocumentDetectorFlow(flow :[
         DocumentDetectorStep(document: Document.CNH_FRONT, stepLabel: nil, illustration: nil, audio: nil),
         DocumentDetectorStep(document: Document.CNH_BACK, stepLabel: nil, illustration: nil, audio: nil)
       ])
     } else if (documentType == "RNE"){
-      documentDetectorBuilder.setDocumentDetectorFlow(flow :[
+      _ = documentDetectorBuilder.setDocumentDetectorFlow(flow :[
         DocumentDetectorStep(document: Document.RNE_FRONT, stepLabel: nil, illustration: nil, audio: nil),
         DocumentDetectorStep(document: Document.RNE_BACK, stepLabel: nil, illustration: nil, audio: nil)
       ])
     } else if (documentType == "CRLV"){
-      documentDetectorBuilder.setDocumentDetectorFlow(flow :[
+      _ = documentDetectorBuilder.setDocumentDetectorFlow(flow :[
         DocumentDetectorStep(document: Document.CRLV, stepLabel: nil, illustration: nil, audio: nil)
       ])
     }
@@ -158,8 +167,8 @@ class CombateAFraude: RCTEventEmitter, PassiveFaceLivenessControllerDelegate, Do
   
   @objc(faceAuthenticator:CPF:)
   func faceAuthenticator(mobileToken: String, CPF: String) {
-    let faceAuthenticator = FaceAuthenticator.Builder(mobileToken: mobileToken)
-      .setPeopleId(CPF)
+    let faceAuthenticator = FaceAuthenticatorSdk.Builder(mobileToken: mobileToken)
+      .setPersonId(CPF)
       .build()
     
     DispatchQueue.main.async {
